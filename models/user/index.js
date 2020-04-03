@@ -66,7 +66,35 @@ login = (email, password) => {
 	});
 }
 
+resolveID = (email) => {
+	return new Promise((resolve, reject) => {
+		pool.query("SELECT * FROM users WHERE email = $1", [email], (error, result) => {
+			if (error) {
+				console.log(error);
+				reject("An internal error occurred!");
+			} else {
+				resolve(result.rows[0].id);
+			}
+		});
+	});
+}
+
+createPassword = (id, name, password) => {
+	return new Promise((resolve, reject) => {
+		pool.query("INSERT INTO passwords (owner, name, password) VALUES ($1, $2, $3)", [id, name, password], (error, result) => {
+			if (error) {
+				console.log(error);
+				reject("An internal error occurred!");
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+
 module.exports = {
 	register,
-	login
+	login,
+	resolveID,
+	createPassword
 }
