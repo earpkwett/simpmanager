@@ -2,7 +2,8 @@ const routes = require('express').Router();
 const queries = require("../../queries");
 
 routes.post("/register", queries.register);
-routes.post("/session", queries.startSession);
-routes.delete("/session", queries.endSession);
+routes.get("/session", queries.getSession);
+routes.post("/session", queries.login);
+routes.delete("/session", queries.logout);
 
 module.exports = routes;
