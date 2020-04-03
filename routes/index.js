@@ -14,6 +14,14 @@ routes.use(session({
 	maxAge: config.session_length
 }));
 
+routes.use((req, res, next) => {
+	if (!req.url.includes("dashboard") && req.session.email) {
+		res.redirect("dashboard");
+	} else {
+		next();
+	}
+});
+
 routes.get("/", (req, res) => {
 	res.render("index", {title: config.web.title});
 })
@@ -24,6 +32,10 @@ routes.get("/register", (req, res) => {
 
 routes.get("/login", (req, res) => {
 	res.render("login", {title: config.web.title + " - Login"});
+})
+
+routes.get("/dashboard", (req, res) => {
+	res.render("dashboard", {title: config.web.title + " - Dashboard"});
 })
 
 routes.use("/api", api);
