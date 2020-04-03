@@ -24,8 +24,18 @@ function register() {
 	let email = document.querySelector("#email").value;
 	let password = document.querySelector("#password").value;
 	API("POST", "register", {email, password}, (result) => {
-		console.log(result)
+		if (result.success) {
+			document.location.href = "dashboard";
+		} else {
+			alert(result.error);
+		}
 	});
+}
+
+document.onkeydown = (e) => {
+	if (e.keyCode == "13"){
+		login();
+	}
 }
 
 </script>
