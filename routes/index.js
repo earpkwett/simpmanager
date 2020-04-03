@@ -15,10 +15,18 @@ routes.use(session({
 }));
 
 routes.use((req, res, next) => {
-	if (!req.url.includes("dashboard") && req.session.email) {
-		res.redirect("dashboard");
+	if (req.url.includes("dashboard")) {
+		if (req.session.email) {
+			next();
+		} else {
+			res.redirect("login");
+		}
 	} else {
-		next();
+		if (req.session.email) {
+			res.redirect("dashboard");
+		} else {
+			next();
+		}
 	}
 });
 
