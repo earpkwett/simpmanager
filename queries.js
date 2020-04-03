@@ -1,18 +1,57 @@
+const User = require("./models/user");
+const validation = require("./validation");
 
 register = (req, res) => {
-	res.json({success: true});
+	const {email, password} = req.body;
+	let emailValid = validation.validateEmail(email);
+	let passwordValid = validation.validatePassword(password);
+	if (emailValid) {
+		res.json({success: false, error: emailValid});
+	} else if (passwordValid) {
+		res.json({success: false, error: passwordValid});
+	}	else {
+		User.register(email, password).then(() => {
+			res.json({success: true});
+		}, (error) => {
+			res.json({success: false, error: error});
+		});
+	}
 }
 
-startSession = (req, res) => {
-	res.json({success: true});
+getSession = (req, res) => {
+	if (req.session.email) {
+		res.json({success: true, session: {email: req.session.email}});
+	} else {
+		res.json({success: false, error: "You are not logged in!"});
+	}
 }
 
-endSession = (req, res) => {
-	res.json({success: true});
+login = (req, res) => {
+	const {email, password} = req.body;
+	if (req.session.email) {
+		res.json({success: false, error: "You are already logged in!"});
+	} else {
+		User.login(email, password).then(() => {
+			req.session.email = email;
+			res.json({success: true});
+		}, () => {
+			res.json({success: false, error: "Incorrect email or password!"});
+		})
+	}
+}
+
+logout = (req, res) => {
+	if (req.session.email) {
+		req.session.destroy();
+		res.json({success: true});
+	} else {
+		res.json({success: false, error: "You are not logged in!"});
+	}
 }
 
 module.exports = {
 	register,
-	startSession,
-	endSession
+	getSession,
+	login,
+	logout
 }
