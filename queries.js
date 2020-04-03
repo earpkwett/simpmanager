@@ -35,8 +35,8 @@ login = (req, res) => {
 		User.login(email, password).then(() => {
 			req.session.email = email;
 			res.json({success: true});
-		}, () => {
-			res.json({success: false, error: "Incorrect email or password!"});
+		}, (error) => {
+			res.json({success: false, error: error});
 		})
 	}
 }
