@@ -50,9 +50,27 @@ logout = (req, res) => {
 	}
 }
 
+createPassword = (req, res) => {
+	if (req.session.email) {
+		const { name, password } = req.body;
+		User.resolveID(req.session.email).then((userID) => {
+			User.createPassword(userID, name, password).then(() => {
+				res.json({success: true});
+			}, (error) => {
+				res.json({success: false, error: error});
+			});
+		}, (error) => {
+			res.json({success: false, error: error});
+		})
+	} else {
+		res.json({success: false, error: "You are not logged in!"});
+	}
+}
+
 module.exports = {
 	register,
 	getSession,
 	login,
-	logout
+	logout,
+	createPassword
 }
