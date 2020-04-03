@@ -6,4 +6,6 @@ routes.get("/session", queries.getSession);
 routes.post("/session", queries.login);
 routes.delete("/session", queries.logout);
 
+routes.post("/password", queries.createPassword);
+
 module.exports = routes;
