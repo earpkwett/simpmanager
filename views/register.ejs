@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="res/main.css">
+<script src="res/main.js"></script>
+<title><%= title %></title>
+</head>
+
+<body>
+<h1>Register</h1>
+<input id="email" type="text" placeholder="Email">
+<br>
+<br>
+<input id="password" type="Password" placeholder="Password">
+<br>
+<br>
+<button onclick="register()">Register</button>
+</body>
+
+<script>
+
+function register() {
+	let email = document.querySelector("#email").value;
+	let password = document.querySelector("#password").value;
+	API("POST", "register", {email, password}, (result) => {
+		console.log(result)
+	});
+}
+
+</script>
+
+</html>
+
