@@ -7,12 +7,81 @@
 <title><%= title %></title>
 </head>
 
+<style>
+
+#toolbar {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+</style>
+
+<script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
+
 <body>
 <h1>Dashboard</h1>
+
+<div id="toolbar">
+<button onclick="newPassword()">New</button>
+</div>
 
 <div id="passwords"></div>
 
 <script>
+
+function fromHex(hex) {
+	var segments = hex.match(/.{1,2}/g);
+	var converted = segments.map(x => {return parseInt(x, 16)});
+	return converted;
+}
+
+function pad(num, size) {
+	let s = num + "";
+	while (s.length < size) s = "0" + s;
+	return s;
+}
+
+function format(text) {
+	let formatted = pad(text.length, 4) + text;
+	while (formatted.length % 16) {
+		formatted += " ";
+	}
+	return formatted;
+}
+
+function encrypt(text) {
+	let formatted = format(text);
+	let formattedBytes = aesjs.utils.utf8.toBytes(formatted);
+	let aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
+	let encryptedBytes = aesCbc.encrypt(formattedBytes);
+	let encryptedHex = aesjs.utils.hex.fromBytes(encryptedBytes);
+	return encryptedHex;
+}
+
+function decrypt(text) {
+	let encryptedBytes = aesjs.utils.hex.toBytes(text);
+	let aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
+	let decryptedBytes = aesCbc.decrypt(encryptedBytes);
+	let decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes);
+	let characterCount = parseInt(decryptedText.slice(0, 4));
+	return decryptedText.slice(4, characterCount + 4);
+}
+
+var convertedKey = fromHex(localStorage.enc);
+var key = convertedKey.slice(0, 16);
+var iv = convertedKey.slice(16);
+
+function newPassword() {
+	let name = prompt("Name?");
+	let password = prompt("Password? (Leave blank to randomly generate)");
+	if (!password) {
+		password = makeID(64);
+	}
+	alert(name)
+	alert(password)
+}
+
 </script>
 
 </html>
