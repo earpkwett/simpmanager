@@ -11,6 +11,7 @@ register = (req, res) => {
 		res.json({success: false, error: passwordValid});
 	}	else {
 		User.register(email, password).then(() => {
+			req.session.email = email;
 			res.json({success: true});
 		}, (error) => {
 			res.json({success: false, error: error});
