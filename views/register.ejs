@@ -25,7 +25,10 @@ function register() {
 	let password = document.querySelector("#password").value;
 	API("POST", "register", {email, password}, (result) => {
 		if (result.success) {
-			document.location.href = "dashboard";
+			sha512(password).then((hash) => {
+				localStorage.enc = hash;
+				document.location.href = "dashboard";
+			});
 		} else {
 			alert(result.error);
 		}
@@ -41,4 +44,3 @@ document.onkeydown = (e) => {
 </script>
 
 </html>
-
