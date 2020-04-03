@@ -1,5 +1,5 @@
 function GET(url, cb) {
-	fetch("api/" + url, {
+	fetch("/api/" + url, {
 		method: "GET",
 	}).then(function(res){ return res.json(); }).then(res => {
 		cb(res);
@@ -7,7 +7,7 @@ function GET(url, cb) {
 }
 
 function API(method, url, data, cb) {
-	fetch("api/" + url, {
+	fetch("/api/" + url, {
 		method: method,
 		headers: {
 			"Content-Type": "application/json"
