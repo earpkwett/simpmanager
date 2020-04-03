@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="res/main.css">
+<script src="res/main.js"></script>
+<title><%= title %></title>
+</head>
+
+<body>
+<h1>Login</h1>
+<input id="email" type="text" placeholder="Email">
+<br>
+<br>
+<input id="password" type="Password" placeholder="Password">
+<br>
+<br>
+<button onclick="login()">Login</button>
+</body>
+
+<script>
+
+function login() {
+	let email = document.querySelector("#email").value;
+	let password = document.querySelector("#password").value;
+	API("POST", "session", {email, password}, (result) => {
+		if (result.success) {
+			document.location.href = "dashboard";
+		} else {
+			alert(result.error);
+		}
+	});
+}
+
+document.onkeydown = (e) => {
+	if (e.keyCode == "13"){
+		login();
+	}
+}
+
+</script>
+
+</html>
+
