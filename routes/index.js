@@ -22,7 +22,7 @@ routes.use((req, res, next) => {
 			res.redirect("login");
 		}
 	} else {
-		if (req.session.email) {
+		if (req.session.email && !req.url.includes("api")) {
 			res.redirect("dashboard");
 		} else {
 			next();
